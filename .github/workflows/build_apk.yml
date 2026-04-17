@@ -1,34 +1,35 @@
-name: Build Flet APK
-on:
-  push:
-    branches: [ main ] # Si attiva quando fai un push su main
-  workflow_dispatch: # Permette l'avvio manuale
+name: Flet Build APK
+on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout del codice
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: Installazione Flet e dipendenze
+      - name: Install SDK dependencies
         run: |
           pip install flet
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Build APK
         run: |
-          # Questo comando genera l'APK. 
-          # Nota: 'flet build apk' richiede Flutter, che l'action gestisce automaticamente.
-          flet build apk --verbose
+          # Usiamo python -m per sicurezza e aggiungiamo il flag verbose
+          python -m flet build apk -v
 
-      - name: Caricamento Artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: flet-app-apk
+          name: my-flet-app
           path: build/apk/*.apk
