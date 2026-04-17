@@ -42,19 +42,23 @@ def main(page: ft.Page):
         # Se l'app gira su Android/iOS, usiamo la cartella dati sicura
         # Se gira su PC, crea il file nella cartella del progetto
         if page.platform in [ft.PagePlatform.ANDROID, ft.PagePlatform.IOS]:
-            db_dir = page.storage.get("db_path") # Prova a recuperare un percorso salvato
+##            db_dir = page.storage.get("db_path") # Prova a recuperare un percorso salvato
+            db_dir = page.user_data_dir
             if not db_dir:
                 # Se non esiste, usiamo la cartella standard dell'app
-                db_dir = page.user_data_dir 
+##                db_dir = page.user_data_dir
+                db_dir = os.getcwdb()
+        else:
+            db_dir = os.getcwdb()
             
             # Assicuriamoci che la cartella esista
-            if not os.path.exists(db_dir):
-                os.makedirs(db_dir)
+        if not os.path.exists(db_dir):
+            os.makedirs(db_dir)
                 
-            db_path = os.path.join(db_dir, "cantina_digitale.db")
-        else:
-            # Percorso standard per Windows/Mac/Linux durante lo sviluppo
-            db_path = "cantina_digitale.db"
+        db_path = os.path.join(db_dir, "cantina_digitale.db")
+##        else:
+##            # Percorso standard per Windows/Mac/Linux durante lo sviluppo
+##            db_path = "cantina_digitale.db"
             
         def init_db():
             conn = sqlite3.connect(db_path) # Usiamo db_path invece del nome fisso
