@@ -25,8 +25,9 @@ jobs:
 
       - name: Build APK
         run: |
+          pip install flet
           # Usiamo python -m per sicurezza e aggiungiamo il flag verbose
-          python -m flet build apk -v
+          flet build apk -v
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
