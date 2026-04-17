@@ -42,7 +42,7 @@ def main(page: ft.Page):
         # Se l'app gira su Android/iOS, usiamo la cartella dati sicura
         # Se gira su PC, crea il file nella cartella del progetto
         if page.platform in [ft.PagePlatform.ANDROID, ft.PagePlatform.IOS]:
-            db_dir = page.client_storage.get("db_path") # Prova a recuperare un percorso salvato
+            db_dir = page.storage.get("db_path") # Prova a recuperare un percorso salvato
             if not db_dir:
                 # Se non esiste, usiamo la cartella standard dell'app
                 db_dir = page.user_data_dir 
